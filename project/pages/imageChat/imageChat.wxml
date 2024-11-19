@@ -1,0 +1,33 @@
+<view class="chat-container">
+  <scroll-view scroll-y="true" class="chat-list" scroll-into-view="{{scrollToMessage}}">
+    <block wx:for="{{messages}}" wx:key="id">
+      <view class="message {{item.type === 'user' ? 'message-user' : 'message-ai'}}" id="msg-{{item.id}}">
+        <view class="avatar">
+          <image src="{{item.type === 'user' ? '/assets/chat.jpg' : '/assets/chat-active.jpg'}}"></image>
+        </view>
+        <view class="content">
+          <text wx:if="{{item.text}}">{{item.text}}</text>
+          <image 
+            wx:if="{{item.image}}" 
+            src="{{item.image}}" 
+            mode="widthFix" 
+            bindtap="previewImage" 
+            bindlongpress="copyImageUrl" 
+            data-src="{{item.image}}"
+          ></image>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+
+  <view class="input-container">
+    <input 
+      class="message-input" 
+      type="text" 
+      value="{{inputMessage}}" 
+      bindinput="onInput"
+      placeholder="输入文字生成图片..."
+    />
+    <button class="send-button" bindtap="sendMessage">发送</button>
+  </view>
+</view>

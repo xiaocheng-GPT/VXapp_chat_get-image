@@ -1,0 +1,76 @@
+<!--
+此文件为开发者工具生成，生成时间: 2024/11/12上午10:28:19
+使用方法：
+在 D:\微信小程序开发工具\文件\project-bolt-sb1-tane7u\project\pages\textChat\textChat.wxml 引入模板
+
+```
+<import src="textChat.skeleton.wxml"/>
+<template is="skeleton" wx:if="{{loading}}" />
+```
+
+在 D:\微信小程序开发工具\文件\project-bolt-sb1-tane7u\project\pages\textChat\textChat.wxss 中引入样式
+```
+@import "./textChat.skeleton.wxss";
+```
+
+更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
+-->
+<template name="skeleton">
+  <view class="sk-container">
+    <view class="chat-container">
+      <scroll-view class="chat-list" id="communication" scroll-into-view="true" scroll-y="true">
+        <view class="message message-user" id="msg-1731310948361">
+          <view class="avatar">
+            <image class="sk-image"></image>
+          </view>
+          <view class="content">
+            <text class="sk-transparent sk-text-14-2857-557 sk-text">你好</text>
+          </view>
+        </view>
+        <view class="message message-ai" id="msg-">
+          <view class="avatar">
+            <image class="sk-image"></image>
+          </view>
+          <view class="content">
+            <image data-src="https://th.bing.com/th/id/R.bb72b2faeff04ba72ed8a43fef0117d0?rik=ZEhpt5UfjlLYRg&amp;riu=http%3a%2f%2fwww.kuaipng.com%2fUploads%2fpic%2fw%2f2023%2f03-18%2f136330%2fwater_136330_698_698_.png&amp;ehk=t1CIM0eYTjOCN8uIVSeAOFhGJTIj6WcYdxmCwPLMavc%3d&amp;risl=&amp;pid=ImgRaw&amp;r=0"
+              mode="widthFix" style="height: 234.234px;" class="sk-image"></image>
+          </view>
+        </view>
+        <view class="message message-user" id="msg-1731310985065">
+          <view class="avatar">
+            <image class="sk-image"></image>
+          </view>
+          <view class="content">
+            <text class="sk-transparent sk-text-14-2857-117 sk-text">你好</text>
+          </view>
+        </view>
+        <view class="message message-ai" id="msg-">
+          <view class="avatar">
+            <image class="sk-image"></image>
+          </view>
+          <view class="content">
+            <image data-src="https://th.bing.com/th/id/R.bb72b2faeff04ba72ed8a43fef0117d0?rik=ZEhpt5UfjlLYRg&amp;riu=http%3a%2f%2fwww.kuaipng.com%2fUploads%2fpic%2fw%2f2023%2f03-18%2f136330%2fwater_136330_698_698_.png&amp;ehk=t1CIM0eYTjOCN8uIVSeAOFhGJTIj6WcYdxmCwPLMavc%3d&amp;risl=&amp;pid=ImgRaw&amp;r=0"
+              mode="widthFix" style="height: 234.234px;" class="sk-image"></image>
+          </view>
+        </view>
+        <view class="message message-user" id="msg-1731376182982">
+          <view class="avatar">
+            <image class="sk-image"></image>
+          </view>
+          <view class="content">
+            <text class="sk-transparent sk-text-14-2857-738 sk-text">你好</text>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="input-container">
+        <view class="toolbar">
+          <view class="image-upload">
+            <image class="sk-image"></image>
+          </view>
+        </view>
+        <view class="message-input sk-image" placeholder="输入消息..." type="text" value="true"></view>
+        <button class="send-button sk-transparent sk-button sk-pseudo sk-pseudo-circle">发送</button>
+      </view>
+    </view>
+  </view>
+</template>

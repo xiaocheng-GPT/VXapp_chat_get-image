@@ -1,0 +1,101 @@
+/* 定义聊天界面的主容器，使用 flex 布局，垂直排列子元素，高度为整个屏幕，背景为浅灰色 */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f1f1f1;
+  background-image: url('http://img.netbian.com/file/2022/0622/small233153lqog71655911913.jpg');  /* 设置背景图片路径 */
+  background-size: cover;  /* 背景图片覆盖整个容器 */
+  background-position: center;  /* 背景居中 */
+  background-attachment: fixed;  /* 滚动时背景不动 */
+}
+
+/* 定义消息列表容器，占据父容器的大部分空间 */
+.chat-list {
+  flex: 1;
+  padding: 20rpx;
+  overflow-y: scroll; /* 确保滚动效果 */
+  z-index: 1;  /* 确保聊天内容在背景上 */
+}
+
+/* 定义每条消息的样式，使用 flex 布局，垂直对齐 */
+.message {
+  display: flex;
+  margin-bottom: 20rpx;
+  align-items: flex-start;
+}
+
+/* 用户消息的样式，调整消息对齐方向，使头像和内容从右往左排列 */
+.message-user {
+  flex-direction: row-reverse;
+}
+
+/* 定义头像的样式，宽高均为 80rpx，左右间距为 20rpx */
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  margin: 0 20rpx;
+}
+
+/* 定义头像图片样式，圆形显示 */
+.avatar image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* 定义消息内容容器的样式，最大宽度为 60%，四角圆滑 */
+.content {
+  max-width: 60%;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  word-break: break-all;
+}
+
+/* 用户消息的背景颜色为绿色 */
+.message-user .content {
+  background-color: #95EC69;
+}
+
+/* AI 消息的背景颜色为白色 */
+.message-ai .content {
+  background-color: #ffffff;
+}
+
+/* 图片消息的样式，最大宽度 100%，圆角显示 */
+.content image {
+  max-width: 100%;
+  border-radius: 8rpx;
+}
+
+/* 输入框容器的样式，位于底部，背景为白色，顶部有 1rpx 灰色边框 */
+.input-container {
+  padding: 20rpx;
+  background-color: rgba(255, 255, 255, 0.9); /* 输入框区域背景透明 */
+  border-top: 1rpx solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  z-index: 2;  /* 确保输入区域位于背景上 */
+}
+
+/* 输入框的样式，占据大部分空间，高度为 70rpx，四角圆滑，边框为灰色 */
+.message-input {
+  flex: 1;
+  height: 70rpx;
+  border: 1rpx solid #e5e5e5;
+  border-radius: 35rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  margin-right: 20rpx;
+}
+
+/* 发送按钮的样式，背景为绿色，字体为白色，按钮高度和输入框一致，四角圆滑 */
+.send-button {
+  background-color: #07C160;
+  color: white;
+  font-size: 28rpx;
+  padding: 0 30rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  border-radius: 35rpx;
+}

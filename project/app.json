@@ -1,0 +1,28 @@
+{
+  "pages": [
+    "pages/textChat/textChat",
+    "pages/imageChat/imageChat"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "AI Chat",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/textChat/textChat",
+        "text": "AI chat",
+        "iconPath": "assets/chat-active.jpg",
+        "selectedIconPath": "assets/send_text.jpg"
+      },
+      {
+        "pagePath": "pages/imageChat/imageChat",
+        "text": "Image chat",
+        "iconPath": "assets/send_photo.jpg",
+        "selectedIconPath": "assets/Rget_photo.jpg"
+      }
+    ]
+  }
+}
