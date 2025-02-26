@@ -6,7 +6,8 @@
           <image src="{{item.type === 'user' ? '/assets/chat.jpg' : '/assets/chat-active.jpg'}}"></image>
         </view>
         <view class="content">
-          <text wx:if="{{item.text}}">{{item.text}}</text>
+          <!-- 修改为 content -->
+          <text wx:if="{{item.content}}">{{item.content}}</text>
           <image 
             wx:if="{{item.image}}" 
             src="{{item.image}}" 
@@ -29,5 +30,9 @@
       placeholder="输入文字生成图片..."
     />
     <button class="send-button" bindtap="sendMessage">发送</button>
+  </view>
+  <!-- 清除对话记录按钮 -->
+  <view class="clear-chat-button">
+    <button class="clear-button" bindtap="clearChatHistory">清除对话记录</button>
   </view>
 </view>

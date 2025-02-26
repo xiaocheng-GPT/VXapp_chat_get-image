@@ -3,7 +3,7 @@
   flex-direction: column;
   height: 100vh;
   background-color: #f1f1f1;
-  background-image: url('http://img.netbian.com/file/2024/1111/small083049ub0ei1731285049.jpg');  /* 设置背景图片路径 */
+  background-image: url('https://sjbz-fd.zol-img.com.cn/t_s1080x1920c/g5/M00/00/02/ChMkJ1fJVFOIV8kdAC3oDpyfq8YAAU9wQN1ivcALegm011.jpg');  /* 设置背景图片路径 */
   background-size: cover;  /* 背景图片覆盖整个容器 */
   background-position: center;  /* 背景居中 */
   background-attachment: fixed;  /* 滚动时背景不动 */

@@ -1,3 +1,7 @@
+const db = wx.cloud.database(); // 初始化数据库
+const chatCollection = db.collection('SQL-BYSJ'); // 定义集合
+
+
 Page({
   autoScroll() {
     // 滚动逻辑
@@ -7,8 +11,8 @@ Page({
     messages: [],
     inputMessage: '',
     scrollToMessage: '',
-    access_token: "24.74792a560881c1e4c821e82497652e3b.2592000.1734058662.282335-116220525", // 原 access_token
-    image_access_token: "24.9a401555e7596e31cb8b76a8c5bd41f8.2592000.1734073875.282335-116223774", // 新的 access_token 用于图片解析
+    access_token: '', // 动态设置
+    image_access_token: '', // 动态设置
     status: 0,
     retryInterval: null,  // 用于轮询查询任务状态的定时器
     maxRetries: 5,  // 最大重试次数
@@ -22,7 +26,49 @@ Page({
     this.setData({
       inputMessage: e.detail.value
     });
+    // 在页面加载时获取两个 token
+    this.getAccessToken();
+    this.getImageAccessToken()
   },
+
+// 获取普通 access_token
+getAccessToken() {
+  wx.cloud.callFunction({
+    name: 'delate', // 云函数名称
+    data: {
+      action: 'updateAccessToken', // 传入 action 参数
+      type: 'access_token', // 传入 type 参数
+    },
+  }).then(res => {
+    if (res.result && res.result.token) {
+      this.setData({ access_token: res.result.token });
+    } else {
+      console.error('Failed to get access_token:', res);
+    }
+  }).catch(err => {
+    console.error('Error fetching access_token:', err);
+  });
+},
+
+// 获取 image_access_token
+getImageAccessToken() {
+  wx.cloud.callFunction({
+    name: 'delate', // 云函数名称
+    data: {
+      action: 'updateAccessToken', // 传入 action 参数
+      type: 'image_access_token', // 传入 type 参数
+    },
+  }).then(res => {
+    if (res.result && res.result.token) {
+      this.setData({ image_access_token: res.result.token });
+    } else {
+      console.error('Failed to get image_access_token:', res);
+    }
+  }).catch(err => {
+    console.error('Error fetching image_access_token:', err);
+  });
+},
+
 
   sendMessage() {
     if (!this.data.inputMessage.trim()) {
@@ -43,6 +89,13 @@ Page({
       messages: [...this.data.messages, newMessage],
       inputMessage: '',
       scrollToMessage: `msg-${newMessage.id}`
+    });
+
+    // 保存消息到云数据库
+    chatCollection.add({
+      data: newMessage,
+      success: (res) => console.log('用户消息保存成功', res),
+      fail: (err) => console.error('用户消息保存失败', err),
     });
 
     // 保存对话记录
@@ -154,12 +207,21 @@ Page({
     const interval = setInterval(() => {
       newMessage.text += content.charAt(index); // 逐字添加文本
       this.setData({
-        messages: [...this.data.messages] // 更新消息内容
+        [`messages[${this.data.messages.length - 1}].text`]: newMessage.text // 使用正确的消息ID更新消息内容
       });
 
       index++;
       if (index === content.length) {
         clearInterval(interval); // 如果消息已显示完，停止定时器
+
+        // 保存AI消息到数据库
+        chatCollection.add({
+          data: newMessage,
+          success: res => console.log('AI消息保存成功', res),
+          fail: err => console.error('AI消息保存失败', err)
+        });
+
+        wx.setStorageSync('messages', this.data.messages);
         this.autoScroll(); // 自动滚动到最新消息
       }
     }, 50); // 每50毫秒显示一个字符
@@ -196,36 +258,43 @@ Page({
       count: 1,
       success: (res) => {
         const imagePath = res.tempFilePaths[0];  // 获取图片路径
-  
+
         // 先展示选择的图片
         this.setData({
           chosenImagePath: imagePath  // 保存选择的图片路径
         });
-  
+
         // 立即在用户消息中显示图片
         const newMessage = {
           id: Date.now(),
           type: 'user',  // 标记为用户消息
           image: imagePath  // 直接存储图片路径
         };
-  
+
         this.setData({
           messages: [...this.data.messages, newMessage],
           scrollToMessage: `msg-${newMessage.id}`  // 滚动到最新消息
         });
-  
+
+        // 保存图片消息到数据库
+        chatCollection.add({
+          data: newMessage,
+          success: res => console.log('图片消息保存成功', res),
+          fail: err => console.error('图片消息保存失败', err)
+        });
+
         // 上传图片后立即回复“图片解析中，请稍后！”
         const processingMessage = {
           id: Date.now() + 1,  // 确保此消息ID唯一
           type: 'ai',  // 标记为AI回复
           text: '图片解析中，请稍后...'  // 提示消息
         };
-  
+
         this.setData({
           messages: [...this.data.messages, processingMessage],
           scrollToMessage: `msg-${processingMessage.id}`  // 滚动到最新消息
         });
-  
+
         // 获取文件的 Base64 编码
         const fs = wx.getFileSystemManager();
         fs.readFile({
@@ -233,10 +302,10 @@ Page({
           encoding: 'base64',
           success: (readRes) => {
             const base64Data = readRes.data;  // 获取 Base64 编码
-  
+
             // 准备发送给图像理解 API 的数据
             const access_token = this.data.image_access_token;  // 使用图片解析的 access_token
-  
+
             // 向图像理解 API 提交请求
             wx.request({
               url: `https://aip.baidubce.com/rest/2.0/image-classify/v1/image-understanding/request?access_token=${access_token}`,
@@ -251,13 +320,13 @@ Page({
               success: (res) => {
                 wx.hideLoading();
                 console.log('图像理解 API 返回:', res);  // 输出图像理解 API 返回的结果
-  
+
                 if (res.data.result) {
                   const taskId = res.data.result.task_id;
                   this.setData({
                     cachedTaskId: taskId  // 缓存 task_id
                   });
-  
+
                   // 开始轮询查询任务结果
                   this.pollForResult(taskId);
                 } else {
@@ -373,13 +442,22 @@ Page({
             clearInterval(interval); // 停止轮询
 
             // 更新图像理解结果
+            const newMessage = {
+              id: Date.now(),
+              type: 'ai',
+              text: `图片分析结果：${description}`
+            };
+
             this.setData({
-              messages: [...this.data.messages, {
-                id: Date.now(),
-                type: 'ai',
-                text: `图片分析结果：${description}`
-              }],
-              scrollToMessage: `msg-${Date.now()}`
+              messages: [...this.data.messages, newMessage],
+              scrollToMessage: `msg-${newMessage.id}`
+            });
+
+            // 保存AI消息到数据库
+            chatCollection.add({
+              data: newMessage,
+              success: res => console.log('AI消息保存成功', res),
+              fail: err => console.error('AI消息保存失败', err)
             });
 
             wx.setStorageSync('messages', this.data.messages);
@@ -423,13 +501,18 @@ Page({
 
   // 清除缓存的对话记录
   clearChatHistory() {
-    wx.removeStorageSync('messages'); // 清除缓存
-    this.setData({
-      messages: [] // 清空当前页面的消息列表
-    });
-    wx.showToast({
-      title: '对话记录已清除',
-      icon: 'success'
+    wx.cloud.callFunction({
+      name: 'delate',
+      data: {
+        action: 'clearChatRecords',
+      },
+      success: () => {
+        this.setData({ messages: [] });
+        wx.showToast({ title: '对话记录已清除', icon: 'success' });
+      },
+      fail: (err) => {
+        console.error('清除记录失败', err);
+      },
     });
   },
 

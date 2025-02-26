@@ -4,7 +4,7 @@
   flex-direction: column;
   height: 100vh;
   background-color: #f1f1f1;
-  background-image: url('http://img.netbian.com/file/2022/0622/small233153lqog71655911913.jpg');  /* 设置背景图片路径 */
+  background-image: url('https://www.bizhigq.com/sj-img/2023-02/g707.jpg');  /* 设置背景图片路径 */
   background-size: cover;  /* 背景图片覆盖整个容器 */
   background-position: center;  /* 背景居中 */
   background-attachment: fixed;  /* 滚动时背景不动 */
@@ -98,4 +98,17 @@
   height: 70rpx;
   line-height: 70rpx;
   border-radius: 35rpx;
+}
+.clear-chat-button {
+  padding: 10rpx;
+  text-align: center;
+  z-index: 3;  /* 确保清除按钮位于背景上 */
+}
+
+.clear-button {
+  background-color: #FF4C4C;
+  color: white;
+  font-size: 28rpx;
+  padding: 10rpx 30rpx;
+  border-radius: 20rpx;
 }
